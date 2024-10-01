@@ -80,7 +80,7 @@
     {"training": "DOT Hazard Material Awareness", "status": "Expired"}
   ],
   "Mila Baird": [
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Arianna Esparza": [
     {"training": "Radiation Safety Annual Refresher", "status": "Expired"}
@@ -113,7 +113,7 @@
   ],
   "Nyla Rose": [
     {"training": "X-Ray Safety", "status": "Expired"},
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Damari Short": [
     {"training": "Retraining in working with the IACUC", "status": "Expired"}
@@ -128,7 +128,7 @@
     {"training": "NIH Guidelines Overview", "status": "Expired"}
   ],
   "Adrienne Yates": [
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Elizabeth Esparza": [
     {"training": "Awareness Training for the Transport of Hazardous Material", "status": "Expired"}
@@ -182,11 +182,11 @@
     {"training": "Medical Records", "status": "Expired"}
   ],
   "Amari Oconnor": [
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Yael Cummings": [
     {"training": "Animal Care And Use Risk Assessment", "status": "Expired"},
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Alonzo Delacruz": [
     {"training": "Using Hazardous Chemicals in an Animal Care Facility", "status": "Expired"}
@@ -216,7 +216,7 @@
     {"training": "OHS Training", "status": "Expired"}
   ],
   "Madeline Davila": [
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"},
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"},
     {"training": "Occupational Exposure to Bloodborne Pathogens", "status": "Expired"}
   ],
   "Micah Barrera": [
@@ -262,10 +262,10 @@
     {"training": "Using Hazardous Chemicals in an Animal Care Facility", "status": "Expired"}
   ],
   "Paxton Marsh": [
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Valentina Nichols": [
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Madisyn Wiggins": [
     {"training": "Medical Records", "status": "Expired"},
@@ -358,7 +358,7 @@
   ],
   "Alicia Mays": [
     {"training": "OHS Training", "status": "Expired"},
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Angelique Goodman": [
     {"training": "Federally Required RCR Training - Must be delivered by PI (Not available online)", "status": "Expired"}
@@ -384,7 +384,7 @@
   ],
   "Misael Irwin": [
     {"training": "Occupational Exposure to Bloodborne Pathogens", "status": "Expired"},
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Tate Morgan": [
     {"training": "Radioactive Materials Safety Training", "status": "Expired"}
@@ -740,7 +740,7 @@
     {"training": "Basic Training Program for Animal Users", "status": "Expired"}
   ],
   "Adalynn Dunlap": [
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Lukas Riggs": [
     {"training": "Physical Science Responsible Conduct of Research Course 1.", "status": "Expired"}
@@ -860,7 +860,7 @@
   ],
   "Julien Terrell": [
     {"training": "IRB Quiz", "status": "Expired"},
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Misael Sawyer": [
     {"training": "Health Screening Questionnaire", "status": "Expired"},
@@ -955,7 +955,7 @@
     {"training": "Understanding Biosafety", "status": "Expired"}
   ],
   "Vance Stout": [
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"},
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"},
     {"training": "Safety Practices and Procedures to Prevent Zoonotic Diseases While Working With Cattle", "status": "Expired"}
   ],
   "Annika Snyder": [
@@ -972,9 +972,9 @@
   ],
   "Jakobe Porter": [
     {"training": "Working in Cold Temperatures", "status": "Expired"},
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"},
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"},
     {"training": "Occupational Exposure to Bloodborne Pathogens", "status": "Expired"},
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Deacon Hanson": [
     {"training": "X-Ray Safety", "status": "Expired"}
@@ -996,7 +996,7 @@
     {"training": "Occupational Exposure to Bloodborne Pathogens", "status": "Expired"}
   ],
   "Saige Mcdonald": [
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Ari Jimenez": [
     {"training": "Safety Practices and Procedures to Prevent Zoonotic Diseases While Working With Cattle", "status": "Expired"}
@@ -1046,7 +1046,7 @@
   ],
   "Martin Dean": [
     {"training": "Physical Science Responsible Conduct of Research Course 1.", "status": "Expired"},
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"},
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"},
     {"training": "Animal Care And Use Risk Assessment", "status": "Expires Soon"}
   ],
   "Arielle Dunn": [
@@ -1056,7 +1056,7 @@
     {"training": "Laboratory Safety Training", "status": "Expired"}
   ],
   "Frank Zuniga": [
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Alexandra Schneider": [
     {"training": "OHS Training", "status": "Expired"},
@@ -1140,7 +1140,7 @@
     {"training": "Retraining in working with the IACUC", "status": "Expired"}
   ],
   "Angela Collier": [
-    {"training": "Transportation of Infectious Substances Category B", "status": "Expired"}
+    {"training": "Transportation of Infectious Substances, Category B", "status": "Expired"}
   ],
   "Jazmine Haynes": [
     {"training": "Safety Practices and Procedures to Prevent Zoonotic Diseases While Working With Cattle", "status": "Expires Soon"}

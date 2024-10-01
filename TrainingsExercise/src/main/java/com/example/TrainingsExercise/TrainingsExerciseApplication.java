@@ -4,23 +4,23 @@ import com.example.TrainingsExercise.models.Person;
 import com.example.TrainingsExercise.models.Training;
 import com.example.TrainingsExercise.models.TrainingStatus;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import java.util.*;
 
 public class TrainingsExerciseApplication {
 
 	public static void main(String[] args) {
 		try {
-			File file = new File(TrainingsExerciseApplication.class.getResource("/trainings (correct).txt").toURI());
-			Scanner scanner = new Scanner(file);
+			JSONParser parser = new JSONParser();
 			List<Person> people = new ArrayList<>();
 
-			parsePeople(scanner, people);
-			scanner.close();
+			parsePeople(parser, people);
 
 			// List each completed training with a count of how many people have completed that training.
 			getNumberOfCompletedTrainings(people);
@@ -49,7 +49,7 @@ public class TrainingsExerciseApplication {
 					// Only count the training if the person hasn't been counted for it yet
 					if (!countedTrainings.contains(trainingName)) {
 						trainingCounts.put(trainingName, trainingCounts.getOrDefault(trainingName, 0) + 1);
-						countedTrainings.add(trainingName); // Mark the training as counted
+						countedTrainings.add(trainingName);
 					}
 				}
 			}
@@ -84,7 +84,7 @@ public class TrainingsExerciseApplication {
 
 			Map<String, List<TrainingStatus>> outputMap = new HashMap<>();
 
-			// Check each person's trainings for expiration criteria
+			// Check each person's trainings for expiration
 			for (Person person : people) {
 				List<TrainingStatus> expiredOrSoonToExpire = new ArrayList<>();
 
@@ -114,77 +114,35 @@ public class TrainingsExerciseApplication {
 		}
 	}
 
-	public static void parsePeople(Scanner scanner, List<Person> people) {
-		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine().trim();
+	public static void parsePeople(JSONParser parser, List<Person> people) {
+		try {
+			InputStream inputStream = TrainingsExerciseApplication.class.getResourceAsStream("/trainings (correct).txt");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+			JSONArray a = (JSONArray) parser.parse(reader);
+			for (Object o : a) {
+				JSONObject person = (JSONObject) o;
 
-			// Check for the start of an array of people
-			if (line.startsWith("{")) {
-				String currentPersonName = null;
-				List<Training> currentCompletions = new ArrayList<>();
+				String name = (String) person.get("name");
 
-				// Read the person properties
-				while (scanner.hasNextLine()) {
-					line = scanner.nextLine().trim();
+				List<Training> completions = new ArrayList<>();
+				JSONArray completionsArray = (JSONArray) person.get("completions");
 
-					// Check for name
-					if (line.startsWith("\"name\":")) {
-						currentPersonName = extractValue(line);
-						System.out.printf("Found name: %s%n", currentPersonName);
-					}
-					// Look for completions array
-					else if (line.startsWith("\"completions\":")) {
-						// Read the next line to check for the array start
-						if (!line.contains("[")) {
-							System.err.println("Expected [ but found: " + line);
-							throw new IllegalArgumentException("Expected [ for completions array.");
-						}
-						if (line.contains("]")) {
-							break;
-						}
-						// Process each training object
-						while (scanner.hasNextLine()) {
-							line = scanner.nextLine().trim();
+				for (Object t : completionsArray) {
+					JSONObject training = (JSONObject) t;
 
-							if (line.startsWith("{")) {
-								String trainingName = null;
-								String timestamp = null;
-								String expires = null;
+					String trainingName = (String) training.get("name");
+					String timestamp = (String) training.get("timestamp");
+					String expires = (String) training.get("expires");
 
-								// Read training details
-								while (scanner.hasNextLine()) {
-									line = scanner.nextLine().trim();
-									if (line.startsWith("\"name\":")) {
-										trainingName = extractValue(line);
-									} else if (line.startsWith("\"timestamp\":")) {
-										timestamp = extractValue(line);
-									} else if (line.startsWith("\"expires\":")) {
-										expires = extractValue(line);
-										currentCompletions.add(new Training(trainingName, timestamp, expires));
-										System.out.printf("Added %s for %s%n", trainingName, currentPersonName);
-									}
-									if (line.equals("}")) {
-										break;
-										// End of trainings
-									}
-								}
-							}
-							// End of the current person object
-							if (line.equals("}")) {
-								if (currentPersonName != null && !currentCompletions.isEmpty()) {
-									people.add(new Person(currentPersonName, new ArrayList<>(currentCompletions)));
-									System.out.printf("Added Person: %s with %d completions.%n", currentPersonName, currentCompletions.size());
-								} else {
-									System.out.printf("Skipped Person: %s with 0 completions.%n", currentPersonName);
-								}
-								currentCompletions.clear();
-								break;
-								// Exit to continue with the next person
-							}
-						}
-					}
+					completions.add(new Training(trainingName, timestamp, expires));
+					System.out.printf("Added %s training for %s%n", trainingName, name);
 				}
+				people.add(new Person(name, completions));
+				System.out.printf("Added Person: %s with %d completions.%n", name, completions.size());
 			}
+
+		} catch (IOException | org.json.simple.parser.ParseException e) {
+			e.printStackTrace();
 		}
 	}
 
