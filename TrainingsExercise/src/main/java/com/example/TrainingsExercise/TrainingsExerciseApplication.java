@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.*;
 
@@ -19,15 +21,16 @@ public class TrainingsExerciseApplication {
 		try {
 			JSONParser parser = new JSONParser();
 			List<Person> people = new ArrayList<>();
-
 			parsePeople(parser, people);
 
 			// List each completed training with a count of how many people have completed that training.
 			getNumberOfCompletedTrainings(people);
+
 			// Given a list of trainings and a fiscal year (defined as 7/1/n-1 – 6/30/n), for each specified training,
 			// list all people that completed that training in the specified fiscal year.
 			// Use parameters: Trainings = "Electrical Safety for Labs", "X-Ray Safety", "Laboratory Safety Training"; Fiscal Year = 2024
 			getCompletedTrainingsInAFiscalYear(people);
+
 			// Given a date, find all people that have any completed trainings that have already expired, or will expire within one month
 			// of the specified date (A training is considered expired the day after its expiration date).
 			// For each person found, list each completed training that met the previous criteria, with an additional field to indicate expired vs expires soon.
@@ -119,17 +122,17 @@ public class TrainingsExerciseApplication {
 			InputStream inputStream = TrainingsExerciseApplication.class.getResourceAsStream("/trainings (correct).txt");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 			JSONArray a = (JSONArray) parser.parse(reader);
+
+			// Loop through array of people
 			for (Object o : a) {
 				JSONObject person = (JSONObject) o;
-
 				String name = (String) person.get("name");
-
 				List<Training> completions = new ArrayList<>();
 				JSONArray completionsArray = (JSONArray) person.get("completions");
 
+				//Loop through completions array
 				for (Object t : completionsArray) {
 					JSONObject training = (JSONObject) t;
-
 					String trainingName = (String) training.get("name");
 					String timestamp = (String) training.get("timestamp");
 					String expires = (String) training.get("expires");
@@ -140,7 +143,6 @@ public class TrainingsExerciseApplication {
 				people.add(new Person(name, completions));
 				System.out.printf("Added Person: %s with %d completions.%n", name, completions.size());
 			}
-
 		} catch (IOException | org.json.simple.parser.ParseException e) {
 			e.printStackTrace();
 		}
@@ -185,72 +187,24 @@ public class TrainingsExerciseApplication {
 		return trainingCompletions;
 	}
 
-	private static String extractValue(String line) {
-		return line.split(":")[1].trim().replace("\"", "").replace(",", "");
-	}
-
 	private static void writeOutput(String filePath, Map<String, Integer> trainingCounts) throws IOException {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		FileWriter writer = new FileWriter(filePath);
-		writer.write("{\n");
-		int count = 0;
-		for (Map.Entry<String, Integer> entry : trainingCounts.entrySet()) {
-			writer.write(String.format("  \"%s\": %d", entry.getKey(), entry.getValue()));
-			if (count < trainingCounts.size() - 1) {
-				writer.write(",\n");
-			}
-			count++;
-		}
-		writer.write("\n}");
+		gson.toJson(trainingCounts, writer);
 		writer.close();
 	}
 
 	private static void writeOutput2(String filePath, Map<String, List<String>> trainingCompletions) throws IOException {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		FileWriter writer = new FileWriter(filePath);
-		writer.write("{\n");
-		int count = 0;
-		for (Map.Entry<String, List<String>> entry : trainingCompletions.entrySet()) {
-			writer.write(String.format("  \"%s\": [", entry.getKey()));
-			List<String> names = entry.getValue();
-			for (int i = 0; i < names.size(); i++) {
-				writer.write("\"" + names.get(i) + "\"");
-				if (i < names.size() - 1) {
-					writer.write(", ");
-				}
-			}
-			writer.write("]");
-			if (count < trainingCompletions.size() - 1) {
-				writer.write(",\n");
-			}
-			count++;
-		}
-		writer.write("\n}");
+		gson.toJson(trainingCompletions, writer);
 		writer.close();
 	}
 
 	private static void writeOutput3(String filePath, Map<String, List<TrainingStatus>> output) throws IOException {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		FileWriter writer = new FileWriter(filePath);
-		writer.write("{\n");
-
-		boolean firstPerson = true;
-		for (Map.Entry<String, List<TrainingStatus>> entry : output.entrySet()) {
-			if (!firstPerson) {
-				writer.write(",\n");
-			}
-			writer.write(String.format("  \"%s\": [\n", entry.getKey()));
-
-			boolean firstTraining = true;
-			for (TrainingStatus status : entry.getValue()) {
-				if (!firstTraining) {
-					writer.write(",\n");
-				}
-				writer.write(String.format("    {\"training\": \"%s\", \"status\": \"%s\"}",
-						status.getTrainingName(), status.getStatus()));
-				firstTraining = false;
-			}
-			writer.write("\n  ]");
-			firstPerson = false;
-		}
-		writer.write("\n}\n");
+		gson.toJson(output, writer);
 		writer.close();
 	}
 }
