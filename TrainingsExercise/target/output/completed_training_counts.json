@@ -1,25 +1,27 @@
-{"IRB Quiz": 24}
-{"NIH Guidelines Overview": 31}
-{"Basic Training Program for Animal Users": 32}
-{"X-Ray Safety": 39}
-{"Retraining in working with the IACUC": 29}
-{"Animal Care And Use Risk Assessment": 35}
-{"Awareness Training for the Transport of Hazardous Material": 38}
-{"Radioactive Materials Safety Training": 35}
-{"Safety Practices and Procedures to Prevent Zoonotic Diseases While Working With Cattle": 35}
-{"Chemical Waste Requirements": 31}
-{"Health Screening Questionnaire": 41}
-{"Transportation of Infectious Substances Category B": 29}
-{"DOT Hazard Material Awareness": 36}
-{"Medical Records": 28}
-{"Understanding Biosafety": 42}
-{"Federally Required RCR Training - Must be delivered by PI (Not available online)": 43}
-{"OHS Training": 33}
-{"Electrical Safety for Labs": 37}
-{"Occupational Exposure to Bloodborne Pathogens": 24}
-{"Safe Handling of Human Cell Lines/Materials in a Research Laboratory": 36}
-{"Working in Cold Temperatures": 37}
-{"Using Hazardous Chemicals in an Animal Care Facility": 40}
-{"Radiation Safety Annual Refresher": 33}
-{"Laboratory Safety Training": 30}
-{"Physical Science Responsible Conduct of Research Course 1.": 34}
+{
+  "NIH Guidelines Overview": 94,
+  "IRB Quiz": 99,
+  "Basic Training Program for Animal Users": 113,
+  "X-Ray Safety": 118,
+  "Animal Care And Use Risk Assessment": 99,
+  "Retraining in working with the IACUC": 114,
+  "Awareness Training for the Transport of Hazardous Material": 110,
+  "Radioactive Materials Safety Training": 121,
+  "Safety Practices and Procedures to Prevent Zoonotic Diseases While Working With Cattle": 114,
+  "Chemical Waste Requirements": 111,
+  "Health Screening Questionnaire": 114,
+  "Transportation of Infectious Substances Category B": 107,
+  "DOT Hazard Material Awareness": 116,
+  "Medical Records": 104,
+  "Understanding Biosafety": 123,
+  "Federally Required RCR Training - Must be delivered by PI (Not available online)": 114,
+  "OHS Training": 116,
+  "Electrical Safety for Labs": 118,
+  "Occupational Exposure to Bloodborne Pathogens": 102,
+  "Safe Handling of Human Cell Lines/Materials in a Research Laboratory": 99,
+  "Using Hazardous Chemicals in an Animal Care Facility": 115,
+  "Working in Cold Temperatures": 110,
+  "Radiation Safety Annual Refresher": 121,
+  "Laboratory Safety Training": 113,
+  "Physical Science Responsible Conduct of Research Course 1.": 111
+}

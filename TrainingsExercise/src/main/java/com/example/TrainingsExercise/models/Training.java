@@ -1,22 +1,22 @@
 package com.example.TrainingsExercise.models;
 
 public class Training {
-    private String name;
+    private String trainingName;
     private String timestamp;
     private String expires;
 
     public Training(String name, String timestamp, String expires) {
-        this.name = name;
+        this.trainingName = name;
         this.timestamp = timestamp;
         this.expires = expires;
     }
 
-    public String getName() {
-        return name;
+    public String getTrainingName() {
+        return trainingName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTrainingName(String trainingName) {
+        this.trainingName = trainingName;
     }
 
     public String getTimestamp() {
@@ -37,6 +37,6 @@ public class Training {
 
     @Override
     public String toString() {
-        return "name: " + name + ", timestamp: " + timestamp + ", expires: " + expires;
+        return "name: " + trainingName + ", timestamp: " + timestamp + ", expires: " + expires;
     }
 }

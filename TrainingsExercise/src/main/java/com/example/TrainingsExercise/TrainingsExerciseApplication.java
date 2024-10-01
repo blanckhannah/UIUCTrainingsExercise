@@ -2,100 +2,55 @@ package com.example.TrainingsExercise;
 
 import com.example.TrainingsExercise.models.Person;
 import com.example.TrainingsExercise.models.Training;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.example.TrainingsExercise.models.TrainingStatus;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
-@SpringBootApplication
 public class TrainingsExerciseApplication {
-	public static void main(String[] args) {
-		// List each completed training with a count of how many people have completed that training.
-		task1();
-		// Given a list of trainings and a fiscal year (defined as 7/1/n-1 – 6/30/n), for each specified training,
-		// list all people that completed that training in the specified fiscal year.
-		// Use parameters: Trainings = "Electrical Safety for Labs", "X-Ray Safety", "Laboratory Safety Training"; Fiscal Year = 2024
-		task2();
-		// Given a date, find all people that have any completed trainings that have already expired, or will expire within one month
-		// of the specified date (A training is considered expired the day after its expiration date).
-		// For each person found, list each completed training that met the previous criteria, with an additional field to indicate expired vs expires soon.
-		// Use date: Oct 1st, 2023
-		task3();
-	}
 
-	public static void task1() {
+	public static void main(String[] args) {
 		try {
 			File file = new File(TrainingsExerciseApplication.class.getResource("/trainings (correct).txt").toURI());
 			Scanner scanner = new Scanner(file);
 			List<Person> people = new ArrayList<>();
 
-			String currentPersonName = null;
-			List<Training> currentCompletions = new ArrayList<>();
-
-			while (scanner.hasNextLine()) {
-				String line = scanner.nextLine().trim();
-
-				if (line.startsWith("{")) {
-					while (scanner.hasNextLine()) {
-						line = scanner.nextLine().trim();
-
-						// Get the person's name
-						if (line.startsWith("\"name\":")) {
-							currentPersonName = extractValue(line);
-						}
-						// Get the completions for the person
-						else if (line.startsWith("\"completions\":")) {
-							while (scanner.hasNextLine()) {
-								line = scanner.nextLine().trim();
-								if (line.equals("]")) {
-									break;
-								}
-								// Process each training object
-								if (line.startsWith("{")) {
-									String trainingName = null;
-									String timestamp = null;
-									String expires = null;
-									// Read trainings
-									while (scanner.hasNextLine()) {
-										line = scanner.nextLine().trim();
-										if (line.startsWith("\"name\":")) {
-											trainingName = extractValue(line);
-										} else if (line.startsWith("\"timestamp\":")) {
-											timestamp = extractValue(line);
-										} else if (line.startsWith("\"expires\":")) {
-											expires = extractValue(line);
-										}
-										if (line.equals("}")) {
-											break;
-										}
-									}
-									// Add training to completions if the name is not null
-									if (trainingName != null) {
-										currentCompletions.add(new Training(trainingName, timestamp, expires));
-									}
-								}
-							}
-						}
-						// Add the person to the list if reached the end
-						if (line.equals("}")) {
-							people.add(new Person(currentPersonName, currentCompletions));
-							break;
-						}
-					}
-				}
-			}
+			parsePeople(scanner, people);
 			scanner.close();
-			// Count how many people completed each training
+
+			// List each completed training with a count of how many people have completed that training.
+			getNumberOfCompletedTrainings(people);
+			// Given a list of trainings and a fiscal year (defined as 7/1/n-1 – 6/30/n), for each specified training,
+			// list all people that completed that training in the specified fiscal year.
+			// Use parameters: Trainings = "Electrical Safety for Labs", "X-Ray Safety", "Laboratory Safety Training"; Fiscal Year = 2024
+			getCompletedTrainingsInAFiscalYear(people);
+			// Given a date, find all people that have any completed trainings that have already expired, or will expire within one month
+			// of the specified date (A training is considered expired the day after its expiration date).
+			// For each person found, list each completed training that met the previous criteria, with an additional field to indicate expired vs expires soon.
+			// Use date: Oct 1st, 2023
+			getExpiringTrainings(people);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void getNumberOfCompletedTrainings(List<Person> people) {
+		try {
 			Map<String, Integer> trainingCounts = new HashMap<>();
 			for (Person person : people) {
+				Set<String> countedTrainings = new HashSet<>();
 				for (Training training : person.getCompletions()) {
-					trainingCounts.put(training.getName(), trainingCounts.getOrDefault(training.getName(), 0) + 1);
+					String trainingName = training.getTrainingName();
+
+					// Only count the training if the person hasn't been counted for it yet
+					if (!countedTrainings.contains(trainingName)) {
+						trainingCounts.put(trainingName, trainingCounts.getOrDefault(trainingName, 0) + 1);
+						countedTrainings.add(trainingName); // Mark the training as counted
+					}
 				}
 			}
 			writeOutput("target/output/completed_training_counts.json", trainingCounts);
@@ -104,15 +59,8 @@ public class TrainingsExerciseApplication {
 		}
 	}
 
-	public static void task2() {
+	public static void getCompletedTrainingsInAFiscalYear(List<Person> people) {
 		try {
-			File file = new File(TrainingsExerciseApplication.class.getResource("/trainings (correct).txt").toURI());
-			Scanner scanner = new Scanner(file);
-			List<Person> people = new ArrayList<>();
-
-			parsePeople(scanner, people);
-			scanner.close();
-
 			// Trainings and fiscal year
 			List<String> trainings = Arrays.asList("Electrical Safety for Labs", "X-Ray Safety", "Laboratory Safety Training");
 			String fiscalYear = "2024";
@@ -121,13 +69,12 @@ public class TrainingsExerciseApplication {
 			Map<String, List<String>> trainingCompletions = getTrainingCompletions(trainings, fiscalYear, people);
 
 			writeOutput2("target/output/fiscal_year_training_completions.json", trainingCompletions);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void task3() {
+	public static void getExpiringTrainings(List<Person> people) {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 			Date specifiedDate = sdf.parse("10/01/2023");
@@ -135,18 +82,11 @@ public class TrainingsExerciseApplication {
 			oneMonthLater.setTime(specifiedDate);
 			oneMonthLater.add(Calendar.MONTH, 1);
 
-			StringBuilder output = new StringBuilder();
-
-			File file = new File(TrainingsExerciseApplication.class.getResource("/trainings (correct).txt").toURI());
-			Scanner scanner = new Scanner(file);
-			List<Person> people = new ArrayList<>();
-
-			parsePeople(scanner, people);
-			scanner.close();
+			Map<String, List<TrainingStatus>> outputMap = new HashMap<>();
 
 			// Check each person's trainings for expiration criteria
 			for (Person person : people) {
-				List<Training> expiredOrSoonToExpire = new ArrayList<>();
+				List<TrainingStatus> expiredOrSoonToExpire = new ArrayList<>();
 
 				for (Training training : person.getCompletions()) {
 					String expiresDateString = training.getExpires();
@@ -157,27 +97,22 @@ public class TrainingsExerciseApplication {
 
 						// Determine the status of the training
 						if (expirationDate.before(specifiedDate)) {
-							expiredOrSoonToExpire.add(new Training(training.getName(), training.getTimestamp(), "Expired"));
+							expiredOrSoonToExpire.add(new TrainingStatus(training.getTrainingName(), "Expired"));
 						} else if (!expirationDate.before(specifiedDate) && expirationDate.before(oneMonthLater.getTime())) {
-							expiredOrSoonToExpire.add(new Training(training.getName(), training.getTimestamp(), "Expires Soon"));
+							expiredOrSoonToExpire.add(new TrainingStatus(training.getTrainingName(), "Expires Soon"));
 						}
 					}
 				}
-				// format for output
+				// Add to output map if there are expired or soon-to-expire trainings
 				if (!expiredOrSoonToExpire.isEmpty()) {
-					output.append(person.getName()).append("\n");
-					for (Training training : expiredOrSoonToExpire) {
-						output.append("     Training: ").append(training.getName())
-								.append(", Status: ").append(training.getExpires()).append(",\n");
-					}
+					outputMap.put(person.getName(), expiredOrSoonToExpire);
 				}
 			}
-			writeOutput3("target/output/expired_or_soon_to_expire_trainings.json", output.toString());
+			writeOutput3("target/output/expired_or_soon_to_expire_trainings.json", outputMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 
 	public static void parsePeople(Scanner scanner, List<Person> people) {
 		while (scanner.hasNextLine()) {
@@ -276,12 +211,12 @@ public class TrainingsExerciseApplication {
 		// Iterate through each person and their completions
 		for (Person person : people) {
 			for (Training training : person.getCompletions()) {
-				if (trainings.contains(training.getName())) {
+				if (trainings.contains(training.getTrainingName())) {
 					try {
 						Date trainingDate = sdf.parse(training.getTimestamp());
 						// Check if the completion date falls within the fiscal year and add person
 						if (trainingDate != null && trainingDate.compareTo(startDate) >= 0 && trainingDate.compareTo(endDate) <= 0) {
-							trainingCompletions.get(training.getName()).add(person.getName());
+							trainingCompletions.get(training.getTrainingName()).add(person.getName());
 						}
 					} catch (ParseException e) {
 						e.printStackTrace();
@@ -298,25 +233,66 @@ public class TrainingsExerciseApplication {
 
 	private static void writeOutput(String filePath, Map<String, Integer> trainingCounts) throws IOException {
 		FileWriter writer = new FileWriter(filePath);
+		writer.write("{\n");
+		int count = 0;
 		for (Map.Entry<String, Integer> entry : trainingCounts.entrySet()) {
-			writer.write(String.format("{\"%s\": %d}%n", entry.getKey(), entry.getValue()));
+			writer.write(String.format("  \"%s\": %d", entry.getKey(), entry.getValue()));
+			if (count < trainingCounts.size() - 1) {
+				writer.write(",\n");
+			}
+			count++;
 		}
+		writer.write("\n}");
 		writer.close();
 	}
 
 	private static void writeOutput2(String filePath, Map<String, List<String>> trainingCompletions) throws IOException {
 		FileWriter writer = new FileWriter(filePath);
 		writer.write("{\n");
+		int count = 0;
 		for (Map.Entry<String, List<String>> entry : trainingCompletions.entrySet()) {
-			writer.write(String.format("  \"%s\": %s,%n", entry.getKey(), entry.getValue()));
+			writer.write(String.format("  \"%s\": [", entry.getKey()));
+			List<String> names = entry.getValue();
+			for (int i = 0; i < names.size(); i++) {
+				writer.write("\"" + names.get(i) + "\"");
+				if (i < names.size() - 1) {
+					writer.write(", ");
+				}
+			}
+			writer.write("]");
+			if (count < trainingCompletions.size() - 1) {
+				writer.write(",\n");
+			}
+			count++;
 		}
-		writer.write("}\n");
+		writer.write("\n}");
 		writer.close();
 	}
 
-	private static void writeOutput3(String filePath, String output) throws IOException {
+	private static void writeOutput3(String filePath, Map<String, List<TrainingStatus>> output) throws IOException {
 		FileWriter writer = new FileWriter(filePath);
-		writer.write(output);
+		writer.write("{\n");
+
+		boolean firstPerson = true;
+		for (Map.Entry<String, List<TrainingStatus>> entry : output.entrySet()) {
+			if (!firstPerson) {
+				writer.write(",\n");
+			}
+			writer.write(String.format("  \"%s\": [\n", entry.getKey()));
+
+			boolean firstTraining = true;
+			for (TrainingStatus status : entry.getValue()) {
+				if (!firstTraining) {
+					writer.write(",\n");
+				}
+				writer.write(String.format("    {\"training\": \"%s\", \"status\": \"%s\"}",
+						status.getTrainingName(), status.getStatus()));
+				firstTraining = false;
+			}
+			writer.write("\n  ]");
+			firstPerson = false;
+		}
+		writer.write("\n}\n");
 		writer.close();
 	}
 }
