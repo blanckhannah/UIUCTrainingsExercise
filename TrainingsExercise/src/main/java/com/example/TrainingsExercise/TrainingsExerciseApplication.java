@@ -56,7 +56,7 @@ public class TrainingsExerciseApplication {
 					}
 				}
 			}
-			writeOutput("target/output/completed_training_counts.json", trainingCounts);
+			writeOutput("output/completed_training_counts.json", trainingCounts);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -71,7 +71,7 @@ public class TrainingsExerciseApplication {
 			// Get training completions based on the specified fiscal year
 			Map<String, List<String>> trainingCompletions = getTrainingCompletions(trainings, fiscalYear, people);
 
-			writeOutput2("target/output/fiscal_year_training_completions.json", trainingCompletions);
+			writeOutput2("output/fiscal_year_training_completions.json", trainingCompletions);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -111,7 +111,7 @@ public class TrainingsExerciseApplication {
 					outputMap.put(person.getName(), expiredOrSoonToExpire);
 				}
 			}
-			writeOutput3("target/output/expired_or_soon_to_expire_trainings.json", outputMap);
+			writeOutput3("output/expired_or_soon_to_expire_trainings.json", outputMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
